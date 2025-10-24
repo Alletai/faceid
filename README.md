@@ -12,23 +12,6 @@ Este repositório entrega **layout, navegação, estados simulados e paginação
 - [Pré-requisitos](#pré-requisitos)
 - [Como criar o projeto e instalar dependências](#como-criar-o-projeto-e-instalar-dependências)
 - [Executar](#executar)
-- [Estrutura de Pastas](#estrutura-de-pastas)
-- [Arquitetura e Padrões](#arquitetura-e-padrões)
-- [Rotas e Navegação](#rotas-e-navegação)
-- [Tema e Sistema Visual](#tema-e-sistema-visual)
-- [Funcionalidades Implementadas](#funcionalidades-implementadas)
-- [Paginação (mock)](#paginação-mock)
-- [Integração futura: Firebase](#integração-futura-firebase)
-- [Integração futura: Backend (Dio)](#integração-futura-backend-dio)
-- [Modelagem e Serialização](#modelagem-e-serialização)
-- [Qualidade de Código](#qualidade-de-código)
-- [Build e Distribuição](#build-e-distribuição)
-- [Testes (sugestão)](#testes-sugestão)
-- [Checklist de Aceitação](#checklist-de-aceitação)
-- [Troubleshooting](#troubleshooting)
-- [Roadmap / TODO](#roadmap--todo)
-- [Licença](#licença)
-
 ---
 
 ## Visão Geral
@@ -70,3 +53,11 @@ Este repositório entrega **layout, navegação, estados simulados e paginação
 ```bash
 flutter create faceid_monitor
 cd faceid_monitor
+flutter pub get
+```
+
+## Como rodar o projeto
+
+```bash
+flutter run
+```
