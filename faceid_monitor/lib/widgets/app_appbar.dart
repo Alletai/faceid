@@ -65,7 +65,7 @@ class _AppSearchDelegate extends SearchDelegate<String?> {
       children: [
         ListTile(
           leading: const Icon(Icons.search),
-          title: Text("Buscar '" + query + "'"),
+          title: Text("Buscar '$query'"),
           onTap: () => close(context, query),
         ),
       ],
@@ -81,7 +81,7 @@ class _AppSearchDelegate extends SearchDelegate<String?> {
       children: [
         ListTile(
           leading: const Icon(Icons.search),
-          title: Text("Buscar '" + query + "'"),
+          title: Text("Buscar '$query'"),
           onTap: () => showResults(context),
         ),
       ],

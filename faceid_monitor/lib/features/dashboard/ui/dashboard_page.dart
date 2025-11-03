@@ -113,13 +113,6 @@ class DashboardPage extends ConsumerWidget {
         ),
         _buildStatCard(
           context,
-          'Taxa de Acerto',
-          '${stats['accuracy']?.toString() ?? '0'}%',
-          BootstrapIcons.check_circle,
-          AppTheme.successGreen,
-        ),
-        _buildStatCard(
-          context,
           'Alertas',
           stats['alerts']?.toString() ?? '0',
           BootstrapIcons.exclamation_triangle,
