@@ -61,26 +61,29 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
 
     return Scaffold(
       appBar: const AppSearchBar(title: 'Gravações'),
-      body: Column(
-        children: [
-          // Calendário
-          Container(
-            color: AppTheme.cardDark,
-            child: CalendarWidget(
-              selectedDate: selectedDate,
-              onDateSelected: (date) {
-                ref.read(recordingsControllerProvider.notifier).selectDate(date);
-                _pagingController.refresh();
-              },
+      body: CustomScrollView(
+        slivers: [
+          // Calendário que rola junto com a lista
+          SliverToBoxAdapter(
+            child: Container(
+              color: AppTheme.cardDark,
+              child: CalendarWidget(
+                selectedDate: selectedDate,
+                onDateSelected: (date) {
+                  ref.read(recordingsControllerProvider.notifier).selectDate(date);
+                  _pagingController.refresh();
+                },
+              ),
             ),
           ),
-          KSpacer.v16,
+          // Espaçamento entre calendário e lista
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
 
-          // Lista de gravações
-          Expanded(
-            child: PagedListView<int, Recording>(
+          // Lista de gravações paginada como Sliver
+          SliverPadding(
+            padding: KPadding.a16,
+            sliver: PagedSliverList<int, Recording>(
               pagingController: _pagingController,
-              padding: KPadding.a16,
               builderDelegate: PagedChildBuilderDelegate<Recording>(
                 itemBuilder: (context, item, index) => RecordingItem(
                   recording: item,
@@ -88,8 +91,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
                 ),
                 firstPageProgressIndicatorBuilder: (context) =>
                     const AppLoadingIndicator(message: 'Carregando gravações...'),
-                newPageProgressIndicatorBuilder: (context) =>
-                    const Padding(
+                newPageProgressIndicatorBuilder: (context) => const Padding(
                   padding: EdgeInsets.all(16),
                   child: AppLoadingIndicator(),
                 ),
@@ -118,7 +120,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) => Container(
-        padding: KPadding.a24,
+        padding: KPadding.h8,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -147,7 +149,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
 
             // Preview da gravação
             AspectRatio(
-              aspectRatio: 16 / 9,
+              aspectRatio: 13 / 6,
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.black,
@@ -196,3 +198,4 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
     );
   }
 }
+
