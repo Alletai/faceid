@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../widgets/app_bottom_nav.dart';
 import '../../../widgets/k_spacers.dart';
 import '../../../theme/app_theme.dart';
 import 'widgets/camera_panel.dart';
 import 'widgets/quick_actions.dart';
 import '../state/dashboard_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 /// Dashboard principal - Reproduz fielmente o layout da imagem 2
 class DashboardPage extends ConsumerWidget {
@@ -15,6 +17,14 @@ class DashboardPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardState = ref.watch(dashboardControllerProvider);
+    final user = FirebaseAuth.instance.currentUser;
+    final idUser = (user!.uid).trim();
+    final email = user.email;
+
+    final userDocStream = FirebaseFirestore.instance
+        .collection('users')
+        .doc(idUser)
+        .snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -25,9 +35,30 @@ class DashboardPage extends ConsumerWidget {
               'Bem-vindo',
               style: Theme.of(context).textTheme.bodySmall,
             ),
-            Text(
-              'Olá, Usuário!',
-              style: Theme.of(context).textTheme.titleLarge,
+            StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+              stream: userDocStream,
+              builder: (context, snapshot) {
+                final data = snapshot.data?.data();
+                final first = (data?['firstName'] ?? '').toString().trim();
+                final last = (data?['lastName'] ?? '').toString().trim();
+                final full = [first, last].where((s) => s.isNotEmpty).join(' ');
+
+                String name;
+                if (full.isNotEmpty) {
+                  name = full;
+                } else if ((user.displayName ?? '').trim().isNotEmpty) {
+                  name = user.displayName!.trim();
+                } else if ((email ?? '').contains('@')) {
+                  name = email!.split('@').first;
+                } else {
+                  name = 'Usuário';
+                }
+
+                return Text(
+                  'Olá, $name!',
+                  style: Theme.of(context).textTheme.titleLarge,
+                );
+              },
             ),
           ],
         ),
@@ -36,14 +67,16 @@ class DashboardPage extends ConsumerWidget {
             icon: const Icon(BootstrapIcons.bell),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Notificações - Em desenvolvimento')),
+                const SnackBar(
+                    content: Text('Notificações - Em desenvolvimento')),
               );
             },
           ),
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => ref.read(dashboardControllerProvider.notifier).refresh(),
+        onRefresh: () =>
+            ref.read(dashboardControllerProvider.notifier).refresh(),
         child: SingleChildScrollView(
           padding: KPadding.a16,
           child: Column(
@@ -72,7 +105,6 @@ class DashboardPage extends ConsumerWidget {
               const QuickActions(),
               KSpacer.v24,
 
-              // Estatísticas do dia (se houver)
               if (dashboardState.stats.isNotEmpty) ...[
                 _buildSectionHeader(context, 'Estatísticas de Hoje'),
                 KSpacer.v16,
@@ -117,13 +149,6 @@ class DashboardPage extends ConsumerWidget {
           stats['alerts']?.toString() ?? '0',
           BootstrapIcons.exclamation_triangle,
           AppTheme.warningOrange,
-        ),
-        _buildStatCard(
-          context,
-          'Uptime',
-          '${stats['uptime']?.toString() ?? '0'}h',
-          BootstrapIcons.clock,
-          AppTheme.textSecondary,
         ),
       ],
     );

@@ -1,144 +1,110 @@
 import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fb_auth;
+import '../../firebase_options.dart' as options;
 
-/// Stub do Firebase para desenvolvimento
-/// TODO: Integrar Firebase real após configurar projeto
-/// 1. Adicionar google-services.json (Android) em android/app/
-/// 2. Adicionar GoogleService-Info.plist (iOS) em ios/Runner/
-/// 3. Executar `flutterfire configure` para configurar
-/// 4. Descomentar Firebase.initializeApp() no main.dart
+/// Firebase facade (real implementation)
 class FirebaseStub {
   static bool _initialized = false;
-  
-  /// Inicializa stubs do Firebase
+
+  /// Initializes Firebase once, using DefaultFirebaseOptions when needed.
   static Future<void> initialize() async {
     if (_initialized) return;
-    
-    if (kDebugMode) {
-      debugPrint('🔥 Firebase Stub: Initialized (mock mode)');
+
+    if (Firebase.apps.isEmpty) {
+      if (kIsWeb) {
+        await Firebase.initializeApp(
+          options: options.DefaultFirebaseOptions.currentPlatform,
+        );
+      } else {
+        await Firebase.initializeApp();
+      }
     }
-    
-    // Simular delay de inicialização
-    await Future.delayed(const Duration(milliseconds: 500));
-    
+
     _initialized = true;
   }
-  
-  /// Verifica se Firebase está inicializado
-  static bool get isInitialized => _initialized;
-  
-  /// Mock: Referência ao Firestore
-  static FirestoreStub get firestore => FirestoreStub();
-  
-  /// Mock: Autenticação
-  static AuthStub get auth => AuthStub();
+
+  /// Whether Firebase was initialized by this facade
+  static bool get isInitialized => _initialized || Firebase.apps.isNotEmpty;
+
+  /// Firestore access
+  static FirestoreStub get firestore => FirestoreStub(FirebaseFirestore.instance);
+
+  /// Auth access
+  static AuthStub get auth => AuthStub(fb_auth.FirebaseAuth.instance);
 }
 
-/// Stub do Firestore
+/// Firestore facade
 class FirestoreStub {
-  /// Mock: Coleção
-  CollectionStub collection(String path) {
-    return CollectionStub(path);
-  }
+  final FirebaseFirestore _firestore;
+  FirestoreStub(this._firestore);
+
+  CollectionStub collection(String path) =>
+      CollectionStub(_firestore.collection(path));
 }
 
-/// Stub de coleção Firestore
+/// Firestore collection facade
 class CollectionStub {
-  final String path;
-  
-  CollectionStub(this.path);
-  
-  /// Mock: Adicionar documento
+  final CollectionReference<Map<String, dynamic>> _collection;
+  CollectionStub(this._collection);
+
   Future<String> add(Map<String, dynamic> data) async {
-    if (kDebugMode) {
-      debugPrint('🔥 Firestore Mock: add($path) => $data');
-    }
-    await Future.delayed(const Duration(milliseconds: 200));
-    return 'mock_doc_${DateTime.now().millisecondsSinceEpoch}';
+    final ref = await _collection.add(data);
+    return ref.id;
   }
-  
-  /// Mock: Buscar documentos
+
   Future<List<Map<String, dynamic>>> get() async {
-    if (kDebugMode) {
-      debugPrint('🔥 Firestore Mock: get($path)');
-    }
-    await Future.delayed(const Duration(milliseconds: 300));
-    return [];
+    final snap = await _collection.get();
+    return snap.docs.map((d) => d.data()).toList(growable: false);
   }
-  
-  /// Mock: Documento específico
-  DocumentStub doc(String id) {
-    return DocumentStub('$path/$id');
-  }
+
+  DocumentStub doc(String id) => DocumentStub(_collection.doc(id));
 }
 
-/// Stub de documento Firestore
+/// Firestore document facade
 class DocumentStub {
-  final String path;
-  
-  DocumentStub(this.path);
-  
-  /// Mock: Atualizar documento
-  Future<void> update(Map<String, dynamic> data) async {
-    if (kDebugMode) {
-      debugPrint('🔥 Firestore Mock: update($path) => $data');
-    }
-    await Future.delayed(const Duration(milliseconds: 200));
-  }
-  
-  /// Mock: Deletar documento
-  Future<void> delete() async {
-    if (kDebugMode) {
-      debugPrint('🔥 Firestore Mock: delete($path)');
-    }
-    await Future.delayed(const Duration(milliseconds: 200));
-  }
-  
-  /// Mock: Buscar documento
+  final DocumentReference<Map<String, dynamic>> _doc;
+  DocumentStub(this._doc);
+
+  Future<void> update(Map<String, dynamic> data) => _doc.update(data);
+
+  Future<void> delete() => _doc.delete();
+
   Future<Map<String, dynamic>?> get() async {
-    if (kDebugMode) {
-      debugPrint('🔥 Firestore Mock: get($path)');
-    }
-    await Future.delayed(const Duration(milliseconds: 200));
-    return null;
+    final snap = await _doc.get();
+    return snap.data();
   }
 }
 
-/// Stub de autenticação Firebase
+/// Firebase Auth facade
 class AuthStub {
-  String? _mockUserId;
-  
-  /// Mock: Usuário atual
-  UserStub? get currentUser => _mockUserId != null ? UserStub(_mockUserId!) : null;
-  
-  /// Mock: Login
+  final fb_auth.FirebaseAuth _auth;
+  AuthStub(this._auth);
+
+  UserStub? get currentUser =>
+      _auth.currentUser != null ? UserStub(_auth.currentUser!) : null;
+
   Future<UserStub> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
-    if (kDebugMode) {
-      debugPrint('🔥 Auth Mock: signIn($email)');
-    }
-    await Future.delayed(const Duration(seconds: 1));
-    _mockUserId = 'mock_user_${DateTime.now().millisecondsSinceEpoch}';
-    return UserStub(_mockUserId!);
+    final cred = await _auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return UserStub(cred.user!);
   }
-  
-  /// Mock: Logout
-  Future<void> signOut() async {
-    if (kDebugMode) {
-      debugPrint('🔥 Auth Mock: signOut()');
-    }
-    await Future.delayed(const Duration(milliseconds: 300));
-    _mockUserId = null;
-  }
+
+  Future<void> signOut() => _auth.signOut();
 }
 
-/// Stub de usuário Firebase
+/// Firebase Auth user facade
 class UserStub {
-  final String uid;
-  
-  UserStub(this.uid);
-  
-  String get email => 'user@citylabsecurity.com';
-  String get displayName => 'Usuário Mock';
+  final fb_auth.User _user;
+  UserStub(this._user);
+
+  String get uid => _user.uid;
+  String? get email => _user.email;
+  String? get displayName => _user.displayName;
 }

@@ -42,6 +42,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     ref.listen(authControllerProvider, (previous, next) {
       if (next.isAuthenticated) {
         context.go('/');
+      } else if (next.errorMessage == '__NEEDS_PROFILE_SETUP__' &&
+          (next.userEmail ?? '').isNotEmpty) {
+        final email = Uri.encodeComponent(next.userEmail!);
+        context.go('/register?email=$email');
       }
     });
 
@@ -140,13 +144,39 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Recuperação de senha - Em desenvolvimento'),
-                            ),
-                          );
-                        },
+                        onPressed: authState.isLoading
+                            ? null
+                            : () async {
+                                final email = _emailController.text.trim();
+                                if (email.isEmpty || !email.contains('@')) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Informe um e-mail válido.'),
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                final ok = await ref
+                                    .read(authControllerProvider.notifier)
+                                    .forgotPassword(email);
+
+                                if (ok) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Enviamos um e-mail para redefinição de senha.',
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  final error = ref.read(authControllerProvider).errorMessage ??
+                                      'Não foi possível enviar o e-mail.';
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(error)),
+                                  );
+                                }
+                              },
                         child: const Text('Esqueci minha senha'),
                       ),
                     ),
@@ -191,15 +221,19 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
                     // Botão Google
                     OutlinedButton.icon(
-                      onPressed: () {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Login com Google - Em desenvolvimento'),
-                          ),
-                        );
-                      },
+                      onPressed: authState.isLoading
+                          ? null
+                          : () {
+                              ref
+                                  .read(authControllerProvider.notifier)
+                                  .loginWithGoogle();
+                            },
                       icon: const Icon(BootstrapIcons.google),
-                      label: const Text('Logar com o Google'),
+                      label: Text(
+                        authState.isLoading
+                            ? 'Conectando...'
+                            : 'Logar com o Google',
+                      ),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                       ),
@@ -216,11 +250,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Cadastro - Em desenvolvimento'),
-                              ),
-                            );
+                            context.go('/register');
                           },
                           child: const Text(
                             'Cadastre-se',

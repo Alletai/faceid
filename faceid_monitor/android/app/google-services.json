@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "371882981753",
+    "project_id": "chatd22-836f0",
+    "storage_bucket": "chatd22-836f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371882981753:android:030c0365910f56471897a8",
+        "android_client_info": {
+          "package_name": "CityLabsSecurity.com"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0iD3RLeceBs2fx9sFYto4il28QyP6Qk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

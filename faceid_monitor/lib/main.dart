@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'firebase_options.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
-import 'services/backend/firebase_stub.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // TODO: Configurar Firebase quando adicionar google-services.json / GoogleService-Info.plist
-  // await Firebase.initializeApp();
-  
+
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } else {
+    await Firebase.initializeApp();
+  }
+
   // Inicializar stubs do Firebase (mock)
-  await FirebaseStub.initialize();
+  
   
   runApp(
     const ProviderScope(

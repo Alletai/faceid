@@ -6,6 +6,7 @@ import '../features/dashboard/ui/dashboard_page.dart';
 import '../features/logs/ui/logs_page.dart';
 import '../features/capture/ui/capture_page.dart';
 import '../features/recordings/ui/recordings_page.dart';
+import '../features/auth/ui/register_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -16,6 +17,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/login',
         name: 'login',
         builder: (context, state) => const LoginPage(),
+      ),
+      GoRoute(
+        path: '/register',
+        name: 'register',
+        builder: (context, state) => RegisterPage(
+          prefillEmail: state.uri.queryParameters['email'],
+        ),
       ),
       GoRoute(
         path: '/',
