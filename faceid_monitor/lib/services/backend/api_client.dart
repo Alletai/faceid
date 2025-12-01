@@ -39,14 +39,14 @@ class ApiClient {
         },
         onResponse: (response, handler) {
           if (kDebugMode) {
-            debugPrint('✅ RESPONSE[${response.statusCode}] => ${response.requestOptions.path}');
+            debugPrint(' RESPONSE[${response.statusCode}] => ${response.requestOptions.path}');
           }
           
           return handler.next(response);
         },
         onError: (error, handler) {
           if (kDebugMode) {
-            debugPrint('❌ ERROR[${error.response?.statusCode}] => ${error.requestOptions.path}');
+            debugPrint(' ERROR[${error.response?.statusCode}] => ${error.requestOptions.path}');
             debugPrint('Message: ${error.message}');
           }
           

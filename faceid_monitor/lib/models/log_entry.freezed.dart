@@ -21,10 +21,11 @@ LogEntry _$LogEntryFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LogEntry {
   String get id => throw _privateConstructorUsedError;
-  DateTime get timestamp => throw _privateConstructorUsedError;
+  DateTime get logsDate => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  LogStatus get status => throw _privateConstructorUsedError;
+  String? get username => throw _privateConstructorUsedError;
+  String? get usersId => throw _privateConstructorUsedError;
   String? get personId => throw _privateConstructorUsedError;
   String? get personName => throw _privateConstructorUsedError;
 
@@ -45,10 +46,11 @@ abstract class $LogEntryCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      DateTime timestamp,
+      DateTime logsDate,
       String title,
       String description,
-      LogStatus status,
+      String? username,
+      String? usersId,
       String? personId,
       String? personName});
 }
@@ -69,10 +71,11 @@ class _$LogEntryCopyWithImpl<$Res, $Val extends LogEntry>
   @override
   $Res call({
     Object? id = null,
-    Object? timestamp = null,
+    Object? logsDate = null,
     Object? title = null,
     Object? description = null,
-    Object? status = null,
+    Object? username = freezed,
+    Object? usersId = freezed,
     Object? personId = freezed,
     Object? personName = freezed,
   }) {
@@ -81,9 +84,9 @@ class _$LogEntryCopyWithImpl<$Res, $Val extends LogEntry>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp: null == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
+      logsDate: null == logsDate
+          ? _value.logsDate
+          : logsDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
       title: null == title
           ? _value.title
@@ -93,10 +96,14 @@ class _$LogEntryCopyWithImpl<$Res, $Val extends LogEntry>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as LogStatus,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
+      usersId: freezed == usersId
+          ? _value.usersId
+          : usersId // ignore: cast_nullable_to_non_nullable
+              as String?,
       personId: freezed == personId
           ? _value.personId
           : personId // ignore: cast_nullable_to_non_nullable
@@ -119,10 +126,11 @@ abstract class _$$LogEntryImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      DateTime timestamp,
+      DateTime logsDate,
       String title,
       String description,
-      LogStatus status,
+      String? username,
+      String? usersId,
       String? personId,
       String? personName});
 }
@@ -141,10 +149,11 @@ class __$$LogEntryImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? timestamp = null,
+    Object? logsDate = null,
     Object? title = null,
     Object? description = null,
-    Object? status = null,
+    Object? username = freezed,
+    Object? usersId = freezed,
     Object? personId = freezed,
     Object? personName = freezed,
   }) {
@@ -153,9 +162,9 @@ class __$$LogEntryImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      timestamp: null == timestamp
-          ? _value.timestamp
-          : timestamp // ignore: cast_nullable_to_non_nullable
+      logsDate: null == logsDate
+          ? _value.logsDate
+          : logsDate // ignore: cast_nullable_to_non_nullable
               as DateTime,
       title: null == title
           ? _value.title
@@ -165,10 +174,14 @@ class __$$LogEntryImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as String,
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as LogStatus,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
+      usersId: freezed == usersId
+          ? _value.usersId
+          : usersId // ignore: cast_nullable_to_non_nullable
+              as String?,
       personId: freezed == personId
           ? _value.personId
           : personId // ignore: cast_nullable_to_non_nullable
@@ -186,10 +199,11 @@ class __$$LogEntryImplCopyWithImpl<$Res>
 class _$LogEntryImpl implements _LogEntry {
   const _$LogEntryImpl(
       {required this.id,
-      required this.timestamp,
+      required this.logsDate,
       required this.title,
       required this.description,
-      required this.status,
+      this.username,
+      this.usersId,
       this.personId,
       this.personName});
 
@@ -199,13 +213,15 @@ class _$LogEntryImpl implements _LogEntry {
   @override
   final String id;
   @override
-  final DateTime timestamp;
+  final DateTime logsDate;
   @override
   final String title;
   @override
   final String description;
   @override
-  final LogStatus status;
+  final String? username;
+  @override
+  final String? usersId;
   @override
   final String? personId;
   @override
@@ -213,7 +229,7 @@ class _$LogEntryImpl implements _LogEntry {
 
   @override
   String toString() {
-    return 'LogEntry(id: $id, timestamp: $timestamp, title: $title, description: $description, status: $status, personId: $personId, personName: $personName)';
+    return 'LogEntry(id: $id, logsDate: $logsDate, title: $title, description: $description, username: $username, usersId: $usersId, personId: $personId, personName: $personName)';
   }
 
   @override
@@ -222,12 +238,14 @@ class _$LogEntryImpl implements _LogEntry {
         (other.runtimeType == runtimeType &&
             other is _$LogEntryImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.timestamp, timestamp) ||
-                other.timestamp == timestamp) &&
+            (identical(other.logsDate, logsDate) ||
+                other.logsDate == logsDate) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
-            (identical(other.status, status) || other.status == status) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
+            (identical(other.usersId, usersId) || other.usersId == usersId) &&
             (identical(other.personId, personId) ||
                 other.personId == personId) &&
             (identical(other.personName, personName) ||
@@ -236,8 +254,8 @@ class _$LogEntryImpl implements _LogEntry {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, id, timestamp, title,
-      description, status, personId, personName);
+  int get hashCode => Object.hash(runtimeType, id, logsDate, title, description,
+      username, usersId, personId, personName);
 
   /// Create a copy of LogEntry
   /// with the given fields replaced by the non-null parameter values.
@@ -258,10 +276,11 @@ class _$LogEntryImpl implements _LogEntry {
 abstract class _LogEntry implements LogEntry {
   const factory _LogEntry(
       {required final String id,
-      required final DateTime timestamp,
+      required final DateTime logsDate,
       required final String title,
       required final String description,
-      required final LogStatus status,
+      final String? username,
+      final String? usersId,
       final String? personId,
       final String? personName}) = _$LogEntryImpl;
 
@@ -271,13 +290,15 @@ abstract class _LogEntry implements LogEntry {
   @override
   String get id;
   @override
-  DateTime get timestamp;
+  DateTime get logsDate;
   @override
   String get title;
   @override
   String get description;
   @override
-  LogStatus get status;
+  String? get username;
+  @override
+  String? get usersId;
   @override
   String? get personId;
   @override

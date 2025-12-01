@@ -19,9 +19,9 @@ class LogDetail extends StatelessWidget {
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.8,
       ),
-      decoration: const BoxDecoration(
-        color: AppTheme.cardDark,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      decoration: BoxDecoration(
+        color: AppTheme.cardBackground(context),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -32,7 +32,7 @@ class LogDetail extends StatelessWidget {
             width: 40,
             height: 4,
             decoration: BoxDecoration(
-              color: AppTheme.dividerColor,
+              color: Theme.of(context).dividerColor,
               borderRadius: BorderRadius.circular(2),
             ),
           ),
@@ -92,21 +92,12 @@ class LogDetail extends StatelessWidget {
                   ),
                   KSpacer.v12,
 
-                  // Status
-                  _buildInfoCard(
-                    context,
-                    'Status',
-                    logEntry.status.displayName,
-                    BootstrapIcons.info_circle,
-                  ),
-                  KSpacer.v12,
-
                   // Descrição
                   Container(
                     width: double.infinity,
                     padding: KPadding.a16,
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryNavy,
+                      color: AppTheme.surfaceMuted(context),
                       borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                     ),
                     child: Column(
@@ -114,10 +105,10 @@ class LogDetail extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Icon(
+                            Icon(
                               BootstrapIcons.align_start,
                               size: 16,
-                              color: AppTheme.textSecondary,
+                              color: Theme.of(context).iconTheme.color,
                             ),
                             KSpacer.h8,
                             Text(
@@ -193,7 +184,7 @@ class LogDetail extends StatelessWidget {
       width: double.infinity,
       padding: KPadding.a16,
       decoration: BoxDecoration(
-        color: AppTheme.secondaryNavy,
+        color: AppTheme.surfaceMuted(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
       ),
       child: Column(
@@ -204,7 +195,7 @@ class LogDetail extends StatelessWidget {
               Icon(
                 icon,
                 size: 16,
-                color: AppTheme.textSecondary,
+                color: Theme.of(context).iconTheme.color,
               ),
               KSpacer.h8,
               Text(

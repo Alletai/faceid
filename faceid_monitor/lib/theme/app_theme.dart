@@ -10,6 +10,12 @@ class AppTheme {
   static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color textSecondary = Color(0xFFB0B8D4);
   static const Color dividerColor = Color(0xFF2A3350);
+  static const Color backgroundLight = Color(0xFFF6F8FB);
+  static const Color cardLight = Color(0xFFF1F5F9);
+  static const Color buttonGreyLight = Color(0xFFE5E7EB);
+  static const Color textPrimaryLight = Color(0xFF0F172A);
+  static const Color textSecondaryLight = Color(0xFF475569);
+  static const Color dividerColorLight = Color(0xFFE2E8F0);
   static const Color errorRed = Color(0xFFFF5252);
   static const Color successGreen = Color(0xFF4CAF50);
   static const Color warningOrange = Color(0xFFFF9800);
@@ -34,6 +40,8 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
+      cardColor: cardDark,
+      dividerColor: dividerColor,
       
       // Color scheme
       colorScheme: const ColorScheme.dark(
@@ -185,5 +193,174 @@ class AppTheme {
         ),
       ),
     );
+  }
+
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      brightness: Brightness.light,
+      cardColor: cardLight,
+      dividerColor: dividerColorLight,
+
+      colorScheme: const ColorScheme.light(
+        primary: accentCyanDark,
+        secondary: primaryNavy,
+        surface: cardLight,
+        onSurface: textPrimaryLight,
+        error: errorRed,
+      ),
+
+      scaffoldBackgroundColor: backgroundLight,
+
+      appBarTheme: const AppBarTheme(
+        backgroundColor: cardLight,
+        elevation: 1,
+        centerTitle: false,
+        surfaceTintColor: Colors.transparent,
+        titleTextStyle: TextStyle(
+          color: textPrimaryLight,
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+        ),
+        iconTheme: IconThemeData(color: textPrimaryLight),
+      ),
+
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: buttonGreyLight,
+          foregroundColor: textPrimaryLight,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusLarge),
+          ),
+          textStyle: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: textPrimaryLight,
+          side: const BorderSide(color: dividerColorLight),
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radiusMedium),
+          ),
+        ),
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: cardLight,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: accentCyanDark, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radiusMedium),
+          borderSide: const BorderSide(color: errorRed),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: const TextStyle(color: textSecondaryLight),
+      ),
+
+      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+        backgroundColor: cardLight,
+        selectedItemColor: accentCyanDark,
+        unselectedItemColor: textSecondaryLight,
+        type: BottomNavigationBarType.fixed,
+        elevation: 8,
+      ),
+
+      dividerTheme: const DividerThemeData(
+        color: dividerColorLight,
+        thickness: 1,
+      ),
+
+      iconTheme: const IconThemeData(
+        color: textSecondaryLight,
+        size: 24,
+      ),
+
+      textTheme: const TextTheme(
+        displayLarge: TextStyle(
+          fontSize: 32,
+          fontWeight: FontWeight.bold,
+          color: textPrimaryLight,
+        ),
+        displayMedium: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: textPrimaryLight,
+        ),
+        displaySmall: TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.w600,
+          color: textPrimaryLight,
+        ),
+        headlineMedium: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.w600,
+          color: textPrimaryLight,
+        ),
+        titleLarge: TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          color: textPrimaryLight,
+        ),
+        titleMedium: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.w500,
+          color: textPrimaryLight,
+        ),
+        bodyLarge: TextStyle(
+          fontSize: 16,
+          color: textPrimaryLight,
+        ),
+        bodyMedium: TextStyle(
+          fontSize: 14,
+          color: textSecondaryLight,
+        ),
+        bodySmall: TextStyle(
+          fontSize: 12,
+          color: textSecondaryLight,
+        ),
+        labelLarge: TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+          color: textPrimaryLight,
+        ),
+      ),
+    );
+  }
+
+  static Color cardBackground(BuildContext context) {
+    return Theme.of(context).cardColor;
+  }
+
+  static Color surfaceMuted(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? secondaryNavy : buttonGreyLight;
+  }
+
+  static Color buttonBackground(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? accentCyan : buttonGreyLight;
+  }
+
+  static Color buttonForeground(BuildContext context) {
+    final brightness = Theme.of(context).brightness;
+    return brightness == Brightness.dark ? primaryNavy : textPrimaryLight;
   }
 }

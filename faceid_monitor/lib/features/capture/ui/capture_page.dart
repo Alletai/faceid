@@ -135,13 +135,13 @@ class CapturePage extends ConsumerWidget {
         fit: StackFit.expand,
         children: [
           // Placeholder da foto
-          const Center(
-            child: Icon(
-              BootstrapIcons.image,
-              size: 32,
-              color: AppTheme.textSecondary,
+            Center(
+              child: Icon(
+                BootstrapIcons.image,
+                size: 32,
+                color: Theme.of(context).iconTheme.color,
+              ),
             ),
-          ),
 
           // Número da foto
           Positioned(

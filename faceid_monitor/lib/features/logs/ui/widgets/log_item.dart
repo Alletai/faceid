@@ -27,7 +27,7 @@ class _LogItemState extends State<LogItem> {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppTheme.cardDark,
+        color: AppTheme.cardBackground(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
       ),
       child: Column(
@@ -49,7 +49,7 @@ class _LogItemState extends State<LogItem> {
                     width: 40,
                     height: 40,
                     decoration: BoxDecoration(
-                      color: AppTheme.secondaryNavy,
+                      color: AppTheme.surfaceMuted(context),
                       borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                     ),
                     child: const Icon(
@@ -67,13 +67,6 @@ class _LogItemState extends State<LogItem> {
                         Text(
                           widget.logEntry.title,
                           style: Theme.of(context).textTheme.titleMedium,
-                        ),
-                        KSpacer.v4,
-                        Text(
-                          widget.logEntry.status.displayName,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: _getStatusColor(widget.logEntry.status),
-                              ),
                         ),
                       ],
                     ),
@@ -150,16 +143,4 @@ class _LogItemState extends State<LogItem> {
     );
   }
 
-  Color _getStatusColor(LogStatus status) {
-    switch (status) {
-      case LogStatus.pending:
-        return AppTheme.textSecondary;
-      case LogStatus.visualized:
-        return AppTheme.successGreen;
-      case LogStatus.alert:
-        return AppTheme.warningOrange;
-      case LogStatus.success:
-        return AppTheme.successGreen;
-    }
-  }
 }

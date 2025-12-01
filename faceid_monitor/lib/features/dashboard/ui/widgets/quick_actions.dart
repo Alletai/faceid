@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:bootstrap_icons/bootstrap_icons.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../theme/app_theme.dart';
 import '../../../../widgets/k_spacers.dart';
+import '../../../logs/state/logs_controller.dart';
 
 /// Widget de ações rápidas
-class QuickActions extends StatelessWidget {
+class QuickActions extends ConsumerWidget {
   const QuickActions({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         _QuickActionButton(
           icon: BootstrapIcons.list_ul,
           label: 'Logs',
-          onTap: () => context.push('/logs'),
+          onTap: () async {
+            try {
+              await ref.read(logsControllerProvider.notifier).fetchLogs(0);
+            } catch (_) {}
+            if (context.mounted) {
+              context.push('/logs');
+            }
+          },
         ),
         _QuickActionButton(
           icon: BootstrapIcons.camera,
@@ -54,7 +63,7 @@ class _QuickActionButton extends StatelessWidget {
         width: 100,
         padding: KPadding.a16,
         decoration: BoxDecoration(
-          color: AppTheme.cardDark,
+          color: AppTheme.cardBackground(context),
           borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
         ),
         child: Column(
@@ -64,7 +73,7 @@ class _QuickActionButton extends StatelessWidget {
               width: 48,
               height: 48,
               decoration: BoxDecoration(
-                color: AppTheme.secondaryNavy,
+                color: AppTheme.surfaceMuted(context),
                 borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
               ),
               child: Icon(

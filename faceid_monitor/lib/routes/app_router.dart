@@ -7,6 +7,8 @@ import '../features/logs/ui/logs_page.dart';
 import '../features/capture/ui/capture_page.dart';
 import '../features/recordings/ui/recordings_page.dart';
 import '../features/auth/ui/register_page.dart';
+import '../features/profile/ui/profile_page.dart';
+import '../features/settings/ui/settings_page.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -24,6 +26,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => RegisterPage(
           prefillEmail: state.uri.queryParameters['email'],
         ),
+      ),
+      GoRoute(
+        path: '/settings',
+        name: 'settings',
+        builder: (context, state) => const SettingsPage(),
       ),
       GoRoute(
         path: '/',
@@ -44,6 +51,11 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         path: '/recordings',
         name: 'recordings',
         builder: (context, state) => const RecordingsPage(),
+      ),
+      GoRoute(
+        path: '/profile',
+        name: 'profile',
+        builder: (context, state) => const ProfilePage(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

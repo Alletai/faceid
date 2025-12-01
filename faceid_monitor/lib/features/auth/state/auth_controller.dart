@@ -20,6 +20,29 @@ class AuthState with _$AuthState {
 class AuthController extends StateNotifier<AuthState> {
   AuthController() : super(const AuthState());
 
+  static String mapAuthError(String code, {String defaultMessage = 'Erro de autenticação.'}) {
+    switch (code) {
+      case 'invalid-email':
+        return 'Email inválido.';
+      case 'user-disabled':
+        return 'Usuário desativado.';
+      case 'user-not-found':
+        return 'Usuário não encontrado.';
+      case 'wrong-password':
+        return 'Senha incorreta.';
+      case 'too-many-requests':
+        return 'Muitas tentativas. Tente novamente mais tarde.';
+      case 'email-already-in-use':
+        return 'E-mail já em uso.';
+      case 'operation-not-allowed':
+        return 'Operação não permitida.';
+      case 'weak-password':
+        return 'Senha fraca. Use pelo menos 6 caracteres.';
+      default:
+        return defaultMessage;
+    }
+  }
+
   /// Login com email e senha
   Future<void> login(String email, String password) async {
     state = state.copyWith(isLoading: true, errorMessage: null);
@@ -43,24 +66,10 @@ class AuthController extends StateNotifier<AuthState> {
         userEmail: user.email ?? email,
       );
     } on FirebaseAuthException catch (e) {
-      String message = 'Erro ao fazer login. Verifique suas credenciais.';
-      switch (e.code) {
-        case 'invalid-email':
-          message = 'Email inválido.';
-          break;
-        case 'user-disabled':
-          message = 'Usuário desativado.';
-          break;
-        case 'user-not-found':
-          message = 'Usuário não encontrado.';
-          break;
-        case 'wrong-password':
-          message = 'Senha incorreta.';
-          break;
-        case 'too-many-requests':
-          message = 'Muitas tentativas. Tente novamente mais tarde.';
-          break;
-      }
+      final message = AuthController.mapAuthError(
+        e.code,
+        defaultMessage: 'Erro ao fazer login. Verifique suas credenciais.',
+      );
       state = state.copyWith(
         isLoading: false,
         errorMessage: message,
@@ -82,16 +91,10 @@ class AuthController extends StateNotifier<AuthState> {
       return true;
     } on FirebaseAuthException catch (e) {
       String message = 'Erro ao enviar email de recuperação.';
-      switch (e.code) {
-        case 'invalid-email':
-          message = 'Email inválido.';
-          break;
-        case 'user-not-found':
-          message = 'Usuário não encontrado.';
-          break;
-        case 'missing-email':
-          message = 'Informe um e-mail válido.';
-          break;
+      if (e.code == 'missing-email') {
+        message = 'Informe um e-mail válido.';
+      } else {
+        message = AuthController.mapAuthError(e.code, defaultMessage: message);
       }
       state = state.copyWith(isLoading: false, errorMessage: message);
       return false;

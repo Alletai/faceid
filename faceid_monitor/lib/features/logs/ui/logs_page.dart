@@ -30,6 +30,9 @@ class _LogsPageState extends ConsumerState<LogsPage> {
     _pagingController.addPageRequestListener((pageKey) {
       _fetchPage(pageKey);
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(logsControllerProvider.notifier).startRealtime();
+    });
   }
 
   Future<void> _fetchPage(int pageKey) async {
@@ -81,7 +84,10 @@ class _LogsPageState extends ConsumerState<LogsPage> {
           ),
           firstPageErrorIndicatorBuilder: (context) => AppErrorState(
             message: _pagingController.error.toString(),
-            onRetry: () => _pagingController.refresh(),
+            onRetry: () {
+              ref.read(logsControllerProvider.notifier).startRealtime();
+              _pagingController.refresh();
+            },
           ),
         ),
       ),

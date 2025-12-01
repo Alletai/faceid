@@ -129,6 +129,10 @@ class _CalendarWidgetState extends State<CalendarWidget> {
   }
 
   Widget _buildDayCell(int day, bool isSelected, bool isToday, DateTime date) {
+    final brightness = Theme.of(context).brightness;
+    final defaultTextColor =
+        brightness == Brightness.dark ? AppTheme.textPrimary : AppTheme.textPrimaryLight;
+
     return InkWell(
       onTap: () => widget.onDateSelected(date),
       borderRadius: BorderRadius.circular(8),
@@ -137,7 +141,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
           color: isSelected
               ? AppTheme.accentCyan
               : isToday
-                  ? AppTheme.secondaryNavy
+                  ? AppTheme.surfaceMuted(context)
                   : Colors.transparent,
           borderRadius: BorderRadius.circular(8),
           border: isToday && !isSelected
@@ -150,7 +154,7 @@ class _CalendarWidgetState extends State<CalendarWidget> {
             style: TextStyle(
               color: isSelected
                   ? AppTheme.primaryNavy
-                  : AppTheme.textPrimary,
+                  : defaultTextColor,
               fontWeight: isSelected || isToday ? FontWeight.bold : FontWeight.normal,
             ),
           ),

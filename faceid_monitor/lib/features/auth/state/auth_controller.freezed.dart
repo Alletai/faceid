@@ -150,7 +150,7 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AuthStateImpl implements _AuthState {
+class _$AuthStateImpl with DiagnosticableTreeMixin implements _AuthState {
   const _$AuthStateImpl(
       {this.isAuthenticated = false,
       this.isLoading = false,
@@ -172,8 +172,20 @@ class _$AuthStateImpl implements _AuthState {
   final String? errorMessage;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'AuthState(isAuthenticated: $isAuthenticated, isLoading: $isLoading, userId: $userId, userEmail: $userEmail, errorMessage: $errorMessage)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'AuthState'))
+      ..add(DiagnosticsProperty('isAuthenticated', isAuthenticated))
+      ..add(DiagnosticsProperty('isLoading', isLoading))
+      ..add(DiagnosticsProperty('userId', userId))
+      ..add(DiagnosticsProperty('userEmail', userEmail))
+      ..add(DiagnosticsProperty('errorMessage', errorMessage));
   }
 
   @override

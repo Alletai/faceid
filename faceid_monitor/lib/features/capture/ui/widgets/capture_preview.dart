@@ -10,7 +10,7 @@ class CapturePreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppTheme.cardDark,
+        color: AppTheme.cardBackground(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
       ),
       child: Column(
@@ -73,12 +73,12 @@ class CapturePreview extends StatelessWidget {
                   Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          BootstrapIcons.camera_video,
-                          size: 48,
-                          color: AppTheme.textSecondary,
-                        ),
+                        children: [
+                          Icon(
+                            BootstrapIcons.camera_video,
+                            size: 48,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
                         KSpacer.v12,
                         Text(
                           'Câmera ativa',
@@ -140,7 +140,7 @@ class CapturePreview extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: AppTheme.secondaryNavy,
+        color: AppTheme.surfaceMuted(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
       ),
       child: Column(

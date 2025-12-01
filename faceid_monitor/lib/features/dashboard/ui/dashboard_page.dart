@@ -18,13 +18,12 @@ class DashboardPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final dashboardState = ref.watch(dashboardControllerProvider);
     final user = FirebaseAuth.instance.currentUser;
-    final idUser = (user!.uid).trim();
-    final email = user.email;
+    final idUser = user?.uid.trim();
+    final email = user?.email;
 
-    final userDocStream = FirebaseFirestore.instance
-        .collection('users')
-        .doc(idUser)
-        .snapshots();
+    final userDocStream = idUser == null
+        ? null
+        : FirebaseFirestore.instance.collection('users').doc(idUser).snapshots();
 
     return Scaffold(
       appBar: AppBar(
@@ -46,10 +45,10 @@ class DashboardPage extends ConsumerWidget {
                 String name;
                 if (full.isNotEmpty) {
                   name = full;
-                } else if ((user.displayName ?? '').trim().isNotEmpty) {
-                  name = user.displayName!.trim();
+                } else if (((user?.displayName ?? '').trim()).isNotEmpty) {
+                  name = (user?.displayName ?? '').trim();
                 } else if ((email ?? '').contains('@')) {
-                  name = email!.split('@').first;
+                  name = (email ?? '').split('@').first;
                 } else {
                   name = 'Usuário';
                 }
@@ -92,10 +91,13 @@ class DashboardPage extends ConsumerWidget {
               KSpacer.v16,
 
               // Painel da câmera
-              CameraPanel(
-                cameraName: dashboardState.cameraName,
-                isLive: dashboardState.isCameraLive,
-                fps: dashboardState.fps,
+              SizedBox(
+                width: double.infinity,
+                child: CameraPanel(
+                  cameraName: dashboardState.cameraName,
+                  isLive: dashboardState.isCameraLive,
+                  fps: dashboardState.fps,
+                ),
               ),
               KSpacer.v24,
 
@@ -105,10 +107,10 @@ class DashboardPage extends ConsumerWidget {
               const QuickActions(),
               KSpacer.v24,
 
-              if (dashboardState.stats.isNotEmpty) ...[
+              if ((dashboardState.stats ?? const {}).isNotEmpty) ...[
                 _buildSectionHeader(context, 'Estatísticas de Hoje'),
                 KSpacer.v16,
-                _buildStatsGrid(context, dashboardState.stats),
+                _buildStatsGrid(context, dashboardState.stats ?? const {}),
               ],
             ],
           ),
@@ -164,7 +166,7 @@ class DashboardPage extends ConsumerWidget {
     return Container(
       padding: KPadding.a16,
       decoration: BoxDecoration(
-        color: AppTheme.cardDark,
+        color: AppTheme.cardBackground(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
       ),
       child: Column(

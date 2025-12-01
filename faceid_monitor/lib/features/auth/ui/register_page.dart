@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+ 
 
 import '../../../theme/app_theme.dart';
 import '../../../widgets/k_spacers.dart';
@@ -55,6 +56,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     try {
       final auth = FirebaseAuth.instance;
       final firestore = FirebaseFirestore.instance;
+      
 
       final current = auth.currentUser;
       User user;
@@ -83,19 +85,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         'createdAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
+      if (!mounted) return;
       if (mounted) {
         // Refresh state and navigate
         ref.read(authControllerProvider.notifier).checkAuthStatus();
         context.go('/');
       }
     } on FirebaseAuthException catch (e) {
-      final msg = e.message ?? 'Erro ao criar conta.';
+      final msg = AuthController.mapAuthError(e.code, defaultMessage: e.message ?? 'Erro ao criar conta.');
+      if (!mounted) return;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(msg)),
         );
       }
     } catch (_) {
+      
+      if (!mounted) return;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Erro ao criar conta.')),

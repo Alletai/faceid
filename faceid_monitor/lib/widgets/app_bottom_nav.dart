@@ -20,12 +20,12 @@ class AppBottomNav extends StatelessWidget {
         BottomNavigationBarItem(
           icon: Icon(BootstrapIcons.gear),
           label: '',
-          tooltip: 'Configurações',
+          tooltip: 'Configuracoes',
         ),
         BottomNavigationBarItem(
           icon: Icon(BootstrapIcons.house),
           label: '',
-          tooltip: 'Início',
+          tooltip: 'Inicio',
         ),
         BottomNavigationBarItem(
           icon: Icon(BootstrapIcons.person),
@@ -41,10 +41,8 @@ class AppBottomNav extends StatelessWidget {
   void _onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        // Configurações
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Configurações - Em desenvolvimento')),
-        );
+        // Configuracoes
+        context.go('/settings');
         break;
       case 1:
         // Home
@@ -52,9 +50,7 @@ class AppBottomNav extends StatelessWidget {
         break;
       case 2:
         // Perfil
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perfil - Em desenvolvimento')),
-        );
+        context.go('/profile');
         break;
     }
   }

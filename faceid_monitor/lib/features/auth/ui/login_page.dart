@@ -160,7 +160,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 final ok = await ref
                                     .read(authControllerProvider.notifier)
                                     .forgotPassword(email);
-
+                                if (!mounted) return;
                                 if (ok) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(

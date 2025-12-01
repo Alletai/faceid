@@ -20,7 +20,7 @@ class RecordingItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: AppTheme.cardDark,
+        color: AppTheme.cardBackground(context),
         borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
       ),
       child: Column(
@@ -72,7 +72,7 @@ class RecordingItem extends StatelessWidget {
                       child: Icon(
                         BootstrapIcons.camera_video,
                         size: 48,
-                        color: AppTheme.textSecondary,
+                        color: null,
                       ),
                     ),
 
@@ -82,7 +82,9 @@ class RecordingItem extends StatelessWidget {
                         width: 56,
                         height: 56,
                         decoration: BoxDecoration(
-                          color: AppTheme.secondaryNavy.withOpacity(0.8),
+                          color: AppTheme.surfaceMuted(context).withOpacity(
+                            Theme.of(context).brightness == Brightness.dark ? 0.8 : 1,
+                          ),
                           borderRadius: BorderRadius.circular(AppTheme.radiusSmall),
                         ),
                         child: const Icon(

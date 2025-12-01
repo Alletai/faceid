@@ -66,7 +66,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
           // Calendário que rola junto com a lista
           SliverToBoxAdapter(
             child: Container(
-              color: AppTheme.cardDark,
+              color: AppTheme.cardBackground(context),
               child: CalendarWidget(
                 selectedDate: selectedDate,
                 onDateSelected: (date) {
@@ -115,7 +115,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
   void _showRecordingPlayer(BuildContext context, Recording recording) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppTheme.cardDark,
+      backgroundColor: AppTheme.cardBackground(context),
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -129,7 +129,7 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: AppTheme.dividerColor,
+                color: Theme.of(context).dividerColor,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -155,13 +155,13 @@ class _RecordingsPageState extends ConsumerState<RecordingsPage> {
                   color: Colors.black,
                   borderRadius: BorderRadius.circular(AppTheme.radiusMedium),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.play_circle_outline,
-                    size: 64,
-                    color: AppTheme.textSecondary,
-                  ),
-                ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.play_circle_outline,
+                        size: 64,
+                        color: null,
+                      ),
+                    ),
               ),
             ),
             KSpacer.v24,
